@@ -51,6 +51,8 @@ export default function ProviderTimerContext({ children }) {
             intervalo,
             voltas,
 
+            checkedForStop,
+
             iniciarTimer,
             pararTimer,
             finalizarTimer,
