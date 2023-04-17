@@ -11,25 +11,34 @@ export default function ProviderTimerContext({ children }) {
     const [voltas, setVoltas] = useState([])
     const [checkedForStop, setcheckedForStop] = useState(false)
 
-    const minutos = (Math.floor(contador / 60)).toString().padStart(2, 0)
-    const segundos = (contador - (minutos * 60)).toString().padStart(2, 0)
+    const isRunning = !!intervalo
+
+    const minutos = String(Math.round(contador / 60)).padStart(2, 0)
+    const segundos = String(contador - (minutos * 60)).padStart(2, 0)
 
     const adicionarUmSegundo = () => setContador(state => state + 1)
+
     const selectChequed = ({ currentTarget: { checked } }) => setcheckedForStop(checked)
+
     const iniciarTimer = event => {
         const inter = setInterval(adicionarUmSegundo, 1000)
 
         setIntervalo(inter)
-
+        
         console.log("Iniciar timer")
     }
+    
+    
+
     const pararTimer = event => {
         setIntervalo(state => {
             clearInterval(state)
             return null
         })
+
         console.log("parar timer")
     }
+
     const finalizarTimer = event => {
         const timer = TimerModel(contador)
 
@@ -40,8 +49,8 @@ export default function ProviderTimerContext({ children }) {
             setContador(0)
         }
     }
+    
     const apagarVolta = indice => event => setVoltas(state => state.filter((_, i) => i !== indice))
-
 
     return (
         <TimerContext.Provider value={{
@@ -52,6 +61,7 @@ export default function ProviderTimerContext({ children }) {
             voltas,
 
             checkedForStop,
+            isRunning,
 
             iniciarTimer,
             pararTimer,
@@ -66,7 +76,7 @@ export default function ProviderTimerContext({ children }) {
 
 const TimerModel = (seg) => {
 
-    const minutes = Math.floor(seg / 60)
+    const minutes = Math.round(seg / 60)
     const segundo = (seg - minutes * 60)
 
     return {

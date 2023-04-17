@@ -1,5 +1,6 @@
-import styled from "styled-components"
+
 import { useTimerContext } from "../contexts/timer"
+import { Container, ContainerBts, ContainerListadeVoltas, Title, Subtitle, Button, } from "../layout/styles.jsx"
 
 export default function Home() {
 
@@ -10,7 +11,8 @@ export default function Home() {
 
   return (
     <Container>
-      <h1>Timer</h1>
+
+      <Title>Timer</Title>
 
       <Relogio minutos={minutos} segundos={segundos} />
 
@@ -22,7 +24,8 @@ export default function Home() {
   )
 }
 
-const Relogio = ({ minutos, segundos }) => <ContainerTitule>{minutos} : {segundos}</ContainerTitule>
+const Relogio = ({ minutos, segundos }) =>
+  <Subtitle>{minutos} : {segundos}</Subtitle>
 
 const Actions = () => {
 
@@ -34,6 +37,8 @@ const Actions = () => {
     intervalo,
     segundos,
 
+    isRunning,
+
     checkedForStop,
   } = useTimerContext()
 
@@ -41,15 +46,35 @@ const Actions = () => {
 
     <ContainerBts className="bts">
       {
-        !!intervalo
-          ? <button onClick={pararTimer} >Parar</button>
-          : <button onClick={iniciarTimer} >Iniciar</button>
+        isRunning
+          ? <Button onClick={pararTimer} >Parar</Button>
+          : <Button onClick={iniciarTimer} >Iniciar</Button>
       }
-      <label htmlFor="pararTimer">
-        <input type="checkbox" name="pararTimer" id="pararTimer" onChange={selectChequed} />
-        <span>Parar quando finalizar?</span>
-      </label>
-      {segundos > 0 && <button onClick={finalizarTimer} >{checkedForStop ? 'Finalizar' : 'Volta'}</button>}
+
+      {
+        isRunning && (
+          <>
+
+            <label htmlFor="pararTimer" class={checkedForStop && `checked`}>
+
+              <input
+                type="checkbox"
+                name="pararTimer"
+                id="pararTimer"
+                onChange={selectChequed}
+              />
+
+              <span>Parar quando finalizar?</span>
+
+            </label>
+
+            <Button onClick={finalizarTimer} >
+              {checkedForStop ? 'Finalizar' : 'Volta'}
+            </Button>
+          </>
+        )
+      }
+
     </ContainerBts>
 
   </>
@@ -66,8 +91,8 @@ const ListadeVoltas = () => {
         {
           voltas.map(({ minuto, segundo }, i) => (
             <li key={`volta-${i}`} >
-              {`Volta ${i + 1}: `}<span>{minuto} : {segundo}</span>
-              <button className="apagar_volta" onClick={apagarVolta(i)} >Apagar</button>
+              <p><span>{minuto} : {segundo}</span>{` | Volta ${i + 1}`}</p>
+              <Button className="apagar_volta" onClick={apagarVolta(i)} >Apagar</Button>
             </li>
           ))
         }
@@ -76,52 +101,3 @@ const ListadeVoltas = () => {
 
   </>
 }
-
-
-const ContainerTitule = styled.h2`
-
-  width: 100%;
-  font-size: 90px;
-  text-align: center;
-
-`
-
-const Container = styled.section`
-
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-
-`
-
-const ContainerBts = styled.div`
-
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-
-`
-
-const ContainerListadeVoltas = styled.section`
-
-  margin-top: 16px;
-
-  ul {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-
-    border: 0.5px solid;
-    padding: 8px;
-
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-
-    li {
-      display: flex;
-      gap: 6px;
-    }
-  }
-
-`
