@@ -1,11 +1,15 @@
-import '../../styles/globals.css'
 import ProviderTimerContext from '../contexts/timer'
+import Layout from '../layout'
 
 function MyApp({ Component, pageProps }) {
   return (
     <>
       <ProviderTimerContext>
-        <Component {...pageProps} />
+        <Layout>
+
+          <Component {...pageProps} />
+          
+        </Layout>
       </ProviderTimerContext>
     </>
   )
